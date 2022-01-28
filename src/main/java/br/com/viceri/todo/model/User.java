@@ -2,6 +2,7 @@ package br.com.viceri.todo.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,11 +50,8 @@ public class User implements Serializable {
 	@Column(name = "password", nullable = false)
 	private String password;
 
-	@Column(name = "status", nullable = false)
-	private String status;
-
 	@ManyToMany(fetch =  FetchType.EAGER)
 	@JoinTable(name = "tb_role_user", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"),
 		inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id"))
-	private Collection<Role> roles;
+	private List<Role> roles;
 }

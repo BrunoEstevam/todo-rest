@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.viceri.todo.dto.RoleRequest;
 import br.com.viceri.todo.model.User;
+import br.com.viceri.todo.security.AuthorizationFilter;
 import br.com.viceri.todo.service.UserService;
 
 @RestController
@@ -23,6 +23,9 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private AuthorizationFilter authorizationFilter;
 	
 	@ResponseStatus(value =  HttpStatus.CREATED)
 	@PostMapping
@@ -42,10 +45,9 @@ public class UserController {
 		return userService.findByEmail(email);
 	}
 	
-	@ResponseStatus(value =  HttpStatus.OK)
-	@PostMapping("/add/user")
-	public void addRoleToUser(@RequestBody RoleRequest roleRequest) {
-		userService.addRoleToUser(roleRequest);
+	@ResponseStatus(value =  HttpStatus.CREATED)
+	@PostMapping("/refresh-token")
+	public void generateAcessTokenByRefreshToken(HttpServletRequest request) {
+		authorizationFilter.generateAcessTokenByRefreshToken(request);
 	}
-	
 }

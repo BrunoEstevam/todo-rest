@@ -21,7 +21,7 @@ public class UserRepositoryImplmentation extends CommomBaseRepository {
 				email);
 
 		return User.builder().id((Long) userMap.get("id")).email((String) userMap.get("email")).name((String) userMap.get("name"))
-				.status((String) userMap.get("status")).password((String) userMap.get("password")).build();
+				.password((String) userMap.get("password")).build();
 	}
 
 	public User saveUser(User entity) {

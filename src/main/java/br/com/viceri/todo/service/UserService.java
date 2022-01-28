@@ -1,6 +1,7 @@
 package br.com.viceri.todo.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.viceri.todo.dto.RoleRequest;
+import br.com.viceri.todo.model.Constants;
 import br.com.viceri.todo.model.User;
 import br.com.viceri.todo.repository.impl.UserRepositoryImplmentation;
 
@@ -33,7 +35,7 @@ public class UserService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		User user = findByEmail(email);
-		
+
 		if (null == user) {
 			throw new UsernameNotFoundException("Usuário não encontrado");
 		}
@@ -52,12 +54,12 @@ public class UserService implements UserDetailsService {
 
 		if (null == user) {
 			throw new EntityExistsException("E-mail já cadastrado no sistema");
-		}
+		} 
 
 		entity.setPassword(bCryptPasswordEncoder.encode(entity.getPassword()));
 		return repository.saveUser(entity);
 	}
-	
+
 	public User findByEmail(String email) {
 		return repository.findByEmail(email);
 	}
@@ -69,5 +71,4 @@ public class UserService implements UserDetailsService {
 			user.getRoles().add(roleService.findByCode(code));
 		}
 	}
-
 }

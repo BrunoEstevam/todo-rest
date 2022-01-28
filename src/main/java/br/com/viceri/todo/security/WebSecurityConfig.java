@@ -50,10 +50,7 @@ public class WebSecurityConfig extends UsernamePasswordAuthenticationFilter {
 			Authentication authResult) throws IOException, ServletException {
 		User user = (User) authResult.getPrincipal();
 
-		String accessToken = JWT.create().withExpiresAt(ACCESS_EXPIRE_AT).withSubject(user.getUsername())
-				.withClaim("ROLES",
-						user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-				.withIssuer(request.getRequestURL().toString()).sign(Algorithm.HMAC256(SECRET));
+		String accessToken = generateAcessToken(request, user);
 
 		String refreshToken = JWT.create().withExpiresAt(Constants.REFRESH_EXPIRE_AT).withSubject(user.getUsername())
 				.withIssuer(request.getRequestURL().toString()).sign(Algorithm.HMAC256(SECRET));
@@ -64,5 +61,13 @@ public class WebSecurityConfig extends UsernamePasswordAuthenticationFilter {
 		
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+	}
+
+	private String generateAcessToken(HttpServletRequest request, User user) {
+		String accessToken = JWT.create().withExpiresAt(ACCESS_EXPIRE_AT).withSubject(user.getUsername())
+				.withClaim("ROLES",
+						user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+				.withIssuer(request.getRequestURL().toString()).sign(Algorithm.HMAC256(SECRET));
+		return accessToken;
 	}
 }

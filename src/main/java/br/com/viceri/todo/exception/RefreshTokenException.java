@@ -8,4 +8,8 @@ public class RefreshTokenException extends RuntimeException {
 	public RefreshTokenException(String errorMessage, Throwable err) {
 		super(errorMessage, err);
 	}
+	
+	public RefreshTokenException(String errorMessage) {
+		super(errorMessage);
+	}
 }
