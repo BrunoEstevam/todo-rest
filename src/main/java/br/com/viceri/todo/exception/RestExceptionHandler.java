@@ -26,6 +26,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return buildResponseEntity(ex, HttpStatus.NOT_FOUND);
 	}
 	
+	@ExceptionHandler({ RefreshTokenException.class })
+	protected ResponseEntity<Object> handleException(RefreshTokenException ex, WebRequest request) {
+		return buildResponseEntity(ex, HttpStatus.FORBIDDEN);
+	}
+	
 	private ResponseEntity<Object> buildResponseEntity(Throwable t, HttpStatus status) {
 		String uid = UUID.randomUUID().toString();
 		log.error(uid, t);

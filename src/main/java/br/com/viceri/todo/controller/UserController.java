@@ -1,5 +1,8 @@
 package br.com.viceri.todo.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +28,12 @@ public class UserController {
 	@PostMapping
 	public void saveUser(@RequestBody User entity) {
 		userService.saveUser(entity);
+	}
+	
+	@ResponseStatus(value =  HttpStatus.CREATED)
+	@PostMapping(value = "/refresh-token")
+	public User refreshToken(HttpServletRequest request, HttpServletResponse response) {
+		return null;
 	}
 	
 	@ResponseStatus(value =  HttpStatus.OK)
