@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,14 +26,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.viceri.todo.exception.RefreshTokenException;
-import br.com.viceri.todo.model.User;
-import br.com.viceri.todo.service.UserService;
-
 public class AuthorizationFilter extends OncePerRequestFilter {
-
-	@Autowired
-	private UserService userService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -71,27 +63,4 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 			}
 		}
 	}
-
-	public String generateAcessTokenByRefreshToken(HttpServletRequest request) {
-		String auth = request.getHeader(HttpHeaders.AUTHORIZATION);
-
-		if (!StringUtils.isEmpty(auth) && auth.startsWith(SUFIX)) {
-			try {
-				DecodedJWT decodedJWT = JwtUtil.decodeJwt(auth);
-				User user = userService.findByEmail(decodedJWT.getSubject());
-
-				List<SimpleGrantedAuthority> roles = new ArrayList<>();
-				roles.addAll(decodedJWT.getClaim("ROLES").asList(String.class).stream()
-						.map(t -> new SimpleGrantedAuthority(t)).collect(Collectors.toList()));
-
-				return JwtUtil.generateAcessToken(request, user);
-				
-			} catch (Exception e) {
-				throw new RefreshTokenException("Não foi possivel gerar o acess token");
-			}
-		} else {
-			throw new RefreshTokenException("Refresh token não encontrado");
-		}
-	}
-
 }

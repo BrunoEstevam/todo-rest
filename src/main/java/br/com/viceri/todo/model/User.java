@@ -1,23 +1,15 @@
 package br.com.viceri.todo.model;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.JoinColumn;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,9 +41,4 @@ public class User implements Serializable {
 	@JsonIgnore
 	@Column(name = "password", nullable = false)
 	private String password;
-
-	@ManyToMany(fetch =  FetchType.EAGER)
-	@JoinTable(name = "tb_role_user", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"),
-		inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id"))
-	private List<Role> roles;
 }
