@@ -48,6 +48,10 @@ public class Task implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "priority", nullable = false)
 	private Priority priority;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status", nullable = false)
+	private Status status;
 
 	@ManyToOne
 	@JoinColumn(name = "id_user", nullable = false)

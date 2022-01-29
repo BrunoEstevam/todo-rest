@@ -1,12 +1,15 @@
 package br.com.viceri.todo.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import br.com.viceri.todo.dto.TaskFilterRequest;
 import br.com.viceri.todo.exception.InvalidDataException;
+import br.com.viceri.todo.model.Status;
 import br.com.viceri.todo.model.Task;
 import br.com.viceri.todo.model.User;
 import br.com.viceri.todo.repository.impl.TaskRepositoryImplmentation;
@@ -24,6 +27,7 @@ public class TaskService {
 		User user = userService.findByEmail(email);
 		
 		entity.setUser(user);
+		entity.setStatus(Status.OPENED);
 		entity.setCreateDate(new Date());
 		
 		isValid(entity);
@@ -31,14 +35,27 @@ public class TaskService {
 		return repository.save(entity);
 	}
 	
-	public Task update(Task entity, String email) {
-		sameUser(entity.getId(), email);
+	public Task update(Task entity, Long id, String email) {
+		Task task = sameUser(id, email);
+
+		if (!task.getDescription().equalsIgnoreCase(entity.getDescription())) {
+			task.setDescription(entity.getDescription());
+		}
 		
-		isValid(entity);
-		
-		return repository.update(entity);
+		if (!task.getPriority().equals(entity.getPriority())) {
+			task.setPriority(entity.getPriority());
+		}
+
+		return repository.update(task);
 	}
 
+	public Task maskAsCompleted(Long id, String email) {
+		Task entity = sameUser(id, email);
+		entity.setStatus(Status.COMPLETED);
+
+		return repository.update(entity);
+	}
+	
 	public void delete(Long id, String email) {
 		sameUser(id, email);
 		
@@ -48,8 +65,12 @@ public class TaskService {
 	public Task findById(Long id) {
 		return repository.findById(id);
 	}
+	
+	public List<Task> findAll(TaskFilterRequest taskFilterRequest, String name) {
+		return repository.findAll(taskFilterRequest, name);
+	}
 
-	private boolean sameUser(Long id, String email) {
+	private Task sameUser(Long id, String email) {
 		User user = userService.findByEmail(email);
 		Task task = findById(id);
 		
@@ -57,7 +78,9 @@ public class TaskService {
 			throw new AccessDeniedException("Você não tem acesso a esta tarefa");
 		}
 		
-		return true;
+		task.setUser(user);
+		
+		return task;
 	}
 	
 	private boolean isValid(Task entity) {
