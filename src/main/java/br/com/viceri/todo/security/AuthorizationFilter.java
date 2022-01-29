@@ -1,13 +1,11 @@
 package br.com.viceri.todo.security;
 
-import static br.com.viceri.todo.model.Constants.SUFIX;
+import static br.com.viceri.todo.model.util.Constants.SUFIX;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -19,7 +17,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -40,12 +37,8 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 			if (!StringUtils.isEmpty(auth) && auth.startsWith(SUFIX)) {
 				try {
 					DecodedJWT decodedJWT = JwtUtil.decodeJwt(auth);
-					List<SimpleGrantedAuthority> roles = new ArrayList<>();
-					roles.addAll(decodedJWT.getClaim("ROLES").asList(String.class).stream()
-							.map(t -> new SimpleGrantedAuthority(t)).collect(Collectors.toList()));
-
 					UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-							decodedJWT.getSubject(), null, roles);
+							decodedJWT.getSubject(), null, new ArrayList<>());
 
 					SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 					filterChain.doFilter(request, response);

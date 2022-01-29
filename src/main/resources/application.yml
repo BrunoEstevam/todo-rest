@@ -7,5 +7,10 @@ spring:
   jpa:
     show-sql: true
     database-platform: org.hibernate.dialect.SQLServer2012Dialect
-    
-    
+
+password:
+  policy:
+    special: 1
+    lower: 1
+    digit: 1
+    upper: 1

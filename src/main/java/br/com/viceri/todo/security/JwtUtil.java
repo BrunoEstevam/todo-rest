@@ -1,8 +1,8 @@
 package br.com.viceri.todo.security;
 
-import static br.com.viceri.todo.model.Constants.ACCESS_EXPIRE_AT;
-import static br.com.viceri.todo.model.Constants.SECRET;
-import static br.com.viceri.todo.model.Constants.SUFIX;
+import static br.com.viceri.todo.model.util.Constants.ACCESS_EXPIRE_AT;
+import static br.com.viceri.todo.model.util.Constants.SECRET;
+import static br.com.viceri.todo.model.util.Constants.SUFIX;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,7 +13,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import br.com.viceri.todo.model.Constants;
+import br.com.viceri.todo.model.util.Constants;
 
 public class JwtUtil {
 

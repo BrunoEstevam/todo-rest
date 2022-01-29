@@ -1,12 +1,11 @@
 package br.com.viceri.todo.security;
 
-import static br.com.viceri.todo.model.Constants.ACCESS_EXPIRE_AT;
-import static br.com.viceri.todo.model.Constants.SECRET;
+import static br.com.viceri.todo.model.util.Constants.ACCESS_EXPIRE_AT;
+import static br.com.viceri.todo.model.util.Constants.SECRET;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -18,7 +17,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -26,7 +24,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.viceri.todo.model.Constants;
+import br.com.viceri.todo.model.util.Constants;
 
 public class WebSecurityConfig extends UsernamePasswordAuthenticationFilter {
 
@@ -39,8 +37,7 @@ public class WebSecurityConfig extends UsernamePasswordAuthenticationFilter {
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
-		// TODO MUDAR
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(request.getParameter("email"), request.getParameter("password"));
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(request.getHeader("email"), request.getHeader("password"));
 
 		return authenticationManager.authenticate(authenticationToken);
 	}
@@ -65,8 +62,6 @@ public class WebSecurityConfig extends UsernamePasswordAuthenticationFilter {
 
 	private String generateAcessToken(HttpServletRequest request, User user) {
 		String accessToken = JWT.create().withExpiresAt(ACCESS_EXPIRE_AT).withSubject(user.getUsername())
-				.withClaim("ROLES",
-						user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 				.withIssuer(request.getRequestURL().toString()).sign(Algorithm.HMAC256(SECRET));
 		return accessToken;
 	}

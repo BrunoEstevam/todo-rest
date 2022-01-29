@@ -44,40 +44,30 @@
       <UniqueConstraints/>
       <SchTrHis/>
     </Tbl>
-    <Tbl UsSo="1" nm="tb_role">
+    <Tbl UsSo="1" nm="tb_task">
       <TblOpts/>
-      <Pk ClNs="id" nm="pktb_role"/>
+      <Pk ClNs="id" nm="pktb_task"/>
       <Cl au="0" df="" nm="id" nu="0">
-        <DT arr="0" ds="BigInt" en="" id="-5" ln="null" sc="null" sg="1" un="0"/>
-      </Cl>
-      <Cl au="0" df="" nm="name" nu="0">
-        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
-      </Cl>
-      <Cl au="0" df="" nm="description" nu="1">
-        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
-      </Cl>
-      <Cl au="0" df="" nm="code" nu="0">
-        <DT arr="0" ds="VarChar" en="" id="12" ln="50" sc="null" sg="1" un="0"/>
-      </Cl>
-      <UniqueConstraints/>
-      <SchTrHis/>
-    </Tbl>
-    <Tbl UsSo="1" nm="tb_role_user">
-      <TblOpts/>
-      <Cl au="0" df="" nm="id_role" nu="0">
         <DT arr="0" ds="BigInt" en="" id="-5" ln="null" sc="null" sg="1" un="0"/>
       </Cl>
       <Cl au="0" df="" nm="id_user" nu="0">
         <DT arr="0" ds="BigInt" en="" id="-5" ln="null" sc="null" sg="1" un="0"/>
       </Cl>
-      <Fk deAc="3" nm="fk_role_user" prLkCl="id" upAc="3">
-        <PrTb mn="0" nm="tb_role" oe="1" sch="dbo" zr="0"/>
-        <CdTb mn="1" nm="tb_role_user" oe="0" sch="dbo" zr="1"/>
-        <ClPr cdCl="id_role" prCl="id"/>
-      </Fk>
-      <Fk deAc="3" nm="fk_user_role" prLkCl="id" upAc="3">
+      <Cl au="0" df="" nm="description" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="due_date" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="create_date" nu="0">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="priority" nu="0">
+        <DT arr="0" ds="Char" en="" id="1" ln="3" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Fk deAc="3" nm="fk_task_user" prLkCl="id" upAc="3">
         <PrTb mn="0" nm="tb_user" oe="1" sch="dbo" zr="0"/>
-        <CdTb mn="1" nm="tb_role_user" oe="0" sch="dbo" zr="1"/>
+        <CdTb mn="1" nm="tb_task" oe="0" sch="dbo" zr="1"/>
         <ClPr cdCl="id_user" prCl="id"/>
       </Fk>
       <UniqueConstraints/>
@@ -98,9 +88,10 @@
       <Cl au="0" df="" nm="password" nu="0">
         <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
       </Cl>
-      <Cl au="0" df="" nm="status" nu="0">
-        <DT arr="0" ds="Char" en="" id="1" ln="3" sc="null" sg="1" un="0"/>
-      </Cl>
+      <Idx clu="0" ftx="0" nm="tb_user_email_Idx" spa="0" unq="1">
+        <ClNs>email</ClNs>
+        <OptTx/>
+      </Idx>
       <UniqueConstraints/>
       <SchTrHis/>
     </Tbl>
@@ -133,13 +124,19 @@
     <Notes/>
     <Zones/>
   </Dgm>
-  <RnmMgr NxRnmId="4">
+  <RnmMgr NxRnmId="6">
     <RnmCh ObjCls="Column" ParCls="Table" ParNme="tb_role" SupCls="Schema" SupNme="dbo">
       <Rnm id="1" nNm="id" oNm="Id"/>
     </RnmCh>
     <RnmCh ObjCls="Column" ParCls="Table" ParNme="tb_role_user" SupCls="Schema" SupNme="dbo">
       <Rnm id="3" nNm="id_role" oNm="id"/>
       <Rnm id="2" nNm="id" oNm="Id"/>
+    </RnmCh>
+    <RnmCh ObjCls="Column" ParCls="Table" ParNme="tb_task" SupCls="Schema" SupNme="dbo">
+      <Rnm id="4" nNm="id" oNm="Id"/>
+    </RnmCh>
+    <RnmCh ObjCls="Column" ParCls="Table" ParNme="tb_task" SupCls="Schema" SupNme="dbo">
+      <Rnm id="5" nNm="id" oNm="Id"/>
     </RnmCh>
   </RnmMgr>
   <DbDocOptionMgr>
@@ -162,7 +159,8 @@
     <TreePath/>
     <TreePath>/Schemas (1)</TreePath>
     <TreePath>/Schemas (1)/dbo</TreePath>
-    <TreePath>/Schemas (1)/dbo/Tables (4)</TreePath>
+    <TreePath>/Schemas (1)/dbo/Tables (3)</TreePath>
+    <TreePath>/Schemas (1)/dbo/Tables (3)/tb_task</TreePath>
     <TreePath>/Schemas (1)/dbo/Procedures (0)</TreePath>
     <TreePath>/Diagrams (1)</TreePath>
     <TreePath>/Diagrams (1)/diagramA</TreePath>

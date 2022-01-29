@@ -3,6 +3,7 @@ package br.com.viceri.todo.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,11 +38,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		WebSecurityConfig webSecurityConfig = new WebSecurityConfig(authenticationManager());
-		http.csrf().disable().authorizeRequests().antMatchers("/user/save**").permitAll().and().authorizeRequests()
-				.anyRequest().authenticated().and()
-
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.addFilter(webSecurityConfig)
+		http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, "/user").permitAll().antMatchers(HttpMethod.POST, "/login").permitAll().and()
+				.authorizeRequests().anyRequest().authenticated().and().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().addFilter(webSecurityConfig)
 				.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	}

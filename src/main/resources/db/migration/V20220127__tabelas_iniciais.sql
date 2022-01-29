@@ -9,4 +9,6 @@ CREATE TABLE dbo.tb_user
 ALTER TABLE dbo.tb_user ADD CONSTRAINT PK_5
 	PRIMARY KEY (id);
 
-create sequence sq_user increment by 1;
+CREATE SEQUENCE sq_user START WITH 1 INCREMENT BY 1 ;
+CREATE UNIQUE NONCLUSTERED INDEX tb_user_email_Idx ON dbo.tb_user (email);
+
