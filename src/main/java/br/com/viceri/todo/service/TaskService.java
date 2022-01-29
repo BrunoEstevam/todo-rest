@@ -51,6 +51,11 @@ public class TaskService {
 
 	public Task maskAsCompleted(Long id, String email) {
 		Task entity = sameUser(id, email);
+		
+		if (entity.getStatus().equals(Status.COMPLETED)) {
+			throw new InvalidDataException("Tarefa já está marcada como concluída");
+		}
+
 		entity.setStatus(Status.COMPLETED);
 
 		return repository.update(entity);
@@ -66,8 +71,8 @@ public class TaskService {
 		return repository.findById(id);
 	}
 	
-	public List<Task> findAll(TaskFilterRequest taskFilterRequest, String name) {
-		return repository.findAll(taskFilterRequest, name);
+	public List<Task> findByPriority(TaskFilterRequest taskFilterRequest, String name) {
+		return repository.findByPriority(taskFilterRequest, name);
 	}
 
 	private Task sameUser(Long id, String email) {

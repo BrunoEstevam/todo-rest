@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.viceri.todo.dto.TokenResponse;
 import br.com.viceri.todo.dto.UserRequest;
 import br.com.viceri.todo.dto.UserResponse;
 import br.com.viceri.todo.model.User;
 import br.com.viceri.todo.service.UserService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/user")
@@ -31,28 +33,42 @@ public class UserController {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	@ApiResponses(value = { 
+			@ApiResponse(description = "Cria um novo usuário", responseCode = "201"),
+			@ApiResponse(description = "Caso já exista um usuário com o mesmo e-mail", responseCode = "400"),
+			@ApiResponse(description = "Caso a senha não cumpra a poliítica de segurança", responseCode = "400")})
 	@ResponseStatus(value = HttpStatus.CREATED)
 	@PostMapping
 	public UserResponse save(@RequestBody UserRequest userResquet) {
-		// Save and convert to DTO 
+		// Save and convert to DTO
 		return modelMapper.map(userService.save(modelMapper.map(userResquet, User.class)), UserResponse.class);
 	}
-	
-	@ResponseStatus(value = HttpStatus.CREATED)
+
+	@ApiResponses(value = { 
+			@ApiResponse(description = "Atualiza o novo usuário", responseCode = "200"),
+			@ApiResponse(description = "Caso já exista um usuário com o mesmo e-mail", responseCode = "400"),
+			@ApiResponse(description = "Caso a senha não cumpra a poliítica de segurança", responseCode = "400")})
+	@ResponseStatus(value = HttpStatus.OK)
 	@PutMapping(value = "/{id}")
 	public void update(@PathVariable(required = true) Long id, @RequestBody User entity) {
 		userService.update(id, entity);
 	}
-	
+
+	@ApiResponse(description = "Retorna caso a consulta seja feita com sucesso", responseCode = "200")
 	@ResponseStatus(value = HttpStatus.OK)
 	@GetMapping(value = "/email")
 	public User findByEmail(@RequestParam(value = "email", required = true) String email) {
 		return userService.findByEmail(email);
 	}
 
+	@ApiResponses(value =  {
+			@ApiResponse(description = "Retorna o novo access token", responseCode = "200"),
+			@ApiResponse(description = "Caso tenha algum problema ao gerar o token", responseCode = "403"),
+			@ApiResponse(description = "Caso o refresh token seja inválido", responseCode = "403")
+	})
 	@ResponseStatus(value = HttpStatus.OK)
 	@PostMapping("/refresh-token")
-	public ResponseEntity<?> generateAcessTokenByRefreshToken(HttpServletRequest request) {
-		return ResponseEntity.ok(userService.generateAcessTokenByRefreshToken(request));
+	public TokenResponse generateAcessTokenByRefreshToken(HttpServletRequest request) {
+		return TokenResponse.builder().accessToken(userService.generateAcessTokenByRefreshToken(request)).build();
 	}
 }

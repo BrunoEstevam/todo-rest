@@ -26,7 +26,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler({ EmptyResultDataAccessException.class, UsernameNotFoundException.class })
 	protected ResponseEntity<Object> handleException(EmptyResultDataAccessException ex, WebRequest request) {
-		return buildResponseEntity(ex, HttpStatus.NOT_FOUND);
+		return buildResponseEntity(ex, HttpStatus.NO_CONTENT);
 	}
 	
 	@ExceptionHandler({ RefreshTokenException.class })

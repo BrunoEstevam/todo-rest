@@ -18,11 +18,7 @@ public class UserRepositoryImplmentation extends CommomBaseRepository {
 	private UserRepositoryInterface repositoryInterface;
 
 	public User save(User entity) throws GenericError {
-		try {
-			return repositoryInterface.save(entity);
-		} catch (Exception e) {
-			throw new GenericError("Erro ao gravar usuario");
-		}
+		return repositoryInterface.save(entity);
 	}
 
 	// Queries Nativas

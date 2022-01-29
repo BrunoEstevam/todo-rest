@@ -38,8 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		WebSecurityConfig webSecurityConfig = new WebSecurityConfig(authenticationManager());
-		http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, "/user").permitAll().antMatchers(HttpMethod.POST, "/login").permitAll().and()
-				.authorizeRequests().anyRequest().authenticated().and().sessionManagement()
+		http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, "/user").permitAll()
+				.antMatchers(HttpMethod.POST, "/login").permitAll().and().authorizeRequests()
+				.antMatchers("/swagger-ui/**", "/swagger-ui.html/**", "/swagger-resources/**", "/v3/api-docs/**")
+				.permitAll().and().authorizeRequests().anyRequest().authenticated().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().addFilter(webSecurityConfig)
 				.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 

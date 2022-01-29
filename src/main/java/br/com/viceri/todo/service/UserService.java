@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import br.com.viceri.todo.exception.InvalidDataException;
+import br.com.viceri.todo.exception.GenericError;
 import br.com.viceri.todo.exception.RefreshTokenException;
 import br.com.viceri.todo.model.User;
 import br.com.viceri.todo.model.util.PasswordConstraintValidator;
@@ -77,7 +77,7 @@ public class UserService implements UserDetailsService {
 			return repository.save(entity);
 			
 		} catch (Exception e) {
-			throw new InvalidDataException("Erro ao gravar usuario");
+			throw new GenericError("Erro ao gravar usuario");
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class UserService implements UserDetailsService {
 	private void isValid(User entity) {
 		try {
 			User user = findByEmail(entity.getEmail());
-			if (null != user && null != entity.getId() && user.getId() != entity.getId()) {
+			if (null != user && user.getId() != entity.getId() ||  null == entity.getId()) {
 				throw new EntityExistsException();
 			}
 

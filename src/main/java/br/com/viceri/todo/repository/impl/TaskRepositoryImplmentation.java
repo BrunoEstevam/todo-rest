@@ -63,7 +63,7 @@ public class TaskRepositoryImplmentation extends CommomBaseRepository {
 				.build();
 	}
 
-	public List<Task> findAll(TaskFilterRequest taskFilterRequest, String email) {
+	public List<Task> findByPriority(TaskFilterRequest taskFilterRequest, String email) {
 		String query = "SELECT task.id AS taskId, * FROM tb_task task INNER JOIN tb_user usr ON task.id_user = usr.id WHERE usr.email = '"
 				+ email + "' AND task.status = '" + Status.OPENED + "' ";
 
