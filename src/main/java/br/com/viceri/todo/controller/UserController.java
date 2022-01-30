@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -56,6 +57,7 @@ public class UserController {
 	@ResponseStatus(value = HttpStatus.OK)
 	@PutMapping(value = "/{id}")
 	public void update(@PathVariable(required = true) Long id, @RequestBody UserUpdateRequest userResquet, Principal principal) {
+		// Seta o id no objeto para que consiga validar e atualizar
 		userResquet.setId(id);
 		
 		userService.update(modelMapper.map(userResquet, User.class), principal.getName());

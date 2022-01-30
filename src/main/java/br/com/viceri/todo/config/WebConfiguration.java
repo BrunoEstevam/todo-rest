@@ -10,6 +10,7 @@ public class WebConfiguration {
 
 	@Bean
 	public ModelMapper modelMapper() {
+		// Mapea os objetos,ex: DTO -> Entidade
 		return new ModelMapper();
 	}
 	

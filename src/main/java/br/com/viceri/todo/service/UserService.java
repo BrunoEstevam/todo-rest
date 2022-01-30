@@ -64,7 +64,7 @@ public class UserService implements UserDetailsService {
 				return JwtUtil.generateAcessToken(request, user);
 
 			} catch (Exception e) {
-				throw new RefreshTokenException("Não foi possivel gerar o acess token");
+				throw new RefreshTokenException("Não foi possivel gerar o acess token", e);
 			}
 		} else {
 			throw new RefreshTokenException("Refresh token não encontrado");
@@ -80,7 +80,7 @@ public class UserService implements UserDetailsService {
 			return repository.save(entity);
 
 		} catch (Exception e) {
-			throw new GenericError("Erro ao gravar usuario");
+			throw new GenericError("Erro ao gravar usuario", e);
 		}
 	}
 
@@ -115,9 +115,8 @@ public class UserService implements UserDetailsService {
 			EmailValidation.isValid(entity.getEmail());
 			
 			return user;
-
 		} catch (IncorrectResultSizeDataAccessException | EntityExistsException e) {
-			throw new EntityExistsException("Já existe um usuário cadastrado com o mesmo e-mail");
+			throw new EntityExistsException("Já existe um usuário cadastrado com o mesmo e-mail", e);
 		}
 	}
 
