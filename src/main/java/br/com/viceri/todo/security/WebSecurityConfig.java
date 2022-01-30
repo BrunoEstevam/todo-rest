@@ -1,7 +1,7 @@
 package br.com.viceri.todo.security;
 
-import static br.com.viceri.todo.model.util.Constants.ACCESS_EXPIRE_AT;
-import static br.com.viceri.todo.model.util.Constants.SECRET;
+import static br.com.viceri.todo.util.Constants.ACCESS_EXPIRE_AT;
+import static br.com.viceri.todo.util.Constants.SECRET;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,7 +24,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.viceri.todo.model.util.Constants;
+import br.com.viceri.todo.util.Constants;
 
 public class WebSecurityConfig extends UsernamePasswordAuthenticationFilter {
 

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.viceri.todo.dto.TaskFilterRequest;
+import br.com.viceri.todo.dto.TaskSaveRequest;
 import br.com.viceri.todo.dto.TaskUpdateRequest;
 import br.com.viceri.todo.model.Task;
 import br.com.viceri.todo.service.TaskService;
@@ -34,14 +35,12 @@ public class TaskController {
 	@Autowired
 	private TaskService taskService;
 
-	@ApiResponses(value = {
-			@ApiResponse(description = "Cria a nova tarefa", responseCode = "201"),
-			@ApiResponse(description = "Caso algum dado sejá inválido", responseCode = "400")
-	})
+	@ApiResponses(value = { @ApiResponse(description = "Cria a nova tarefa", responseCode = "201"),
+			@ApiResponse(description = "Caso algum dado sejá inválido", responseCode = "400") })
 	@ResponseStatus(value = HttpStatus.CREATED)
 	@PostMapping
-	public Task save(@RequestBody Task entity, Principal principal) {
-		return taskService.save(entity, principal.getName());
+	public Task save(@RequestBody TaskSaveRequest taskRequest, Principal principal) {
+		return taskService.save(modelMapper.map(taskRequest, Task.class), principal.getName());
 	}
 
 	@ApiResponses(value = { @ApiResponse(description = "Marca a tarefa como concluída", responseCode = "200"),
@@ -57,8 +56,8 @@ public class TaskController {
 			@ApiResponse(description = "Caso o usuário não tenha permissão para alterar a tarefa", responseCode = "403") })
 	@ResponseStatus(value = HttpStatus.OK)
 	@PutMapping("/{id}")
-	public Task update(@PathVariable(required = true) Long id,
-			@RequestBody TaskUpdateRequest taskRequest, Principal principal) {
+	public Task update(@PathVariable(required = true) Long id, @RequestBody TaskUpdateRequest taskRequest,
+			Principal principal) {
 		return taskService.update(modelMapper.map(taskRequest, Task.class), id, principal.getName());
 	}
 
@@ -73,11 +72,11 @@ public class TaskController {
 	@ApiResponses(value = { @ApiResponse(description = "Consulta as tarefas do usuário", responseCode = "200"),
 			@ApiResponse(description = "Caso não encontre nenhuma tarefa", responseCode = "204") })
 	@GetMapping("/findAll")
-	public ResponseEntity<?> findByPriority(@RequestBody TaskFilterRequest taskFilterRequest, Principal principal) {
+	public ResponseEntity<List<Task>> findByPriority(@RequestBody TaskFilterRequest taskFilterRequest, Principal principal) {
 		List<Task> entities = taskService.findByPriority(taskFilterRequest, principal.getName());
 
 		if (null == entities || entities.isEmpty()) {
-			return new ResponseEntity<List<?>>(entities, HttpStatus.NO_CONTENT);
+			return new ResponseEntity<List<Task>>(entities, HttpStatus.NO_CONTENT);
 		}
 
 		return ResponseEntity.ok(entities);

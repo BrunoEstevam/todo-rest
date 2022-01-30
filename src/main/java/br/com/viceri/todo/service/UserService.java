@@ -1,6 +1,6 @@
 package br.com.viceri.todo.service;
 
-import static br.com.viceri.todo.model.util.Constants.SUFIX;
+import static br.com.viceri.todo.util.Constants.SUFIX;
 
 import java.util.ArrayList;
 
@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,9 +24,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import br.com.viceri.todo.exception.GenericError;
 import br.com.viceri.todo.exception.RefreshTokenException;
 import br.com.viceri.todo.model.User;
-import br.com.viceri.todo.model.util.PasswordConstraintValidator;
 import br.com.viceri.todo.repository.impl.UserRepositoryImplmentation;
 import br.com.viceri.todo.security.JwtUtil;
+import br.com.viceri.todo.util.PasswordConstraintValidator;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -69,40 +71,47 @@ public class UserService implements UserDetailsService {
 	}
 
 	public User save(User entity) {
-		isValid(entity);
+		emailIsValid(entity);
 		passwordConstraintValidator.isValid(entity.getPassword());
-		
+
 		try {
 			entity.setPassword(bCryptPasswordEncoder.encode(entity.getPassword()));
 			return repository.save(entity);
-			
+
 		} catch (Exception e) {
 			throw new GenericError("Erro ao gravar usuario");
 		}
 	}
-	
-	public void update(Long id, User entity) {
-		isValid(entity);
-		User user = findById(id);
+
+	public User update(User entity, String email) {
+		User user = findById(entity.getId());
+		User userToken = findByEmail(email);
 		
-		if (StringUtils.isNotEmpty(entity.getPassword())) {
+		if (null == user) {
+			throw new EmptyResultDataAccessException("Nenhum usuário encontrado", 1);
+
+		} else if (user.getId() != userToken.getId()) {
+			throw new AccessDeniedException("Você não tem acesso a este recurso");
+
+		} else if (StringUtils.isNotEmpty(entity.getPassword())) {
 			passwordConstraintValidator.isValid(entity.getPassword());
+
 		} else {
-			// Seta a senha para nao ter enviar request
+			// Seta a senha para nao ter que enviar na request
 			entity.setPassword(user.getPassword());
 		}
-		
-		entity.setId(id);
-		
-		repository.save(entity);
+
+		return repository.save(entity);
 	}
 
-	private void isValid(User entity) {
+	private User emailIsValid(User entity) {
 		try {
 			User user = findByEmail(entity.getEmail());
-			if (null != user && user.getId() != entity.getId() ||  null == entity.getId()) {
+			if (null != user && user.getId() != entity.getId()) {
 				throw new EntityExistsException();
 			}
+
+			return user;
 
 		} catch (IncorrectResultSizeDataAccessException | EntityExistsException e) {
 			throw new EntityExistsException("Já existe um usuário cadastrado com o mesmo e-mail");

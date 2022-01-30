@@ -1,6 +1,7 @@
 package br.com.viceri.todo.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import br.com.viceri.todo.model.Priority;
 import lombok.AllArgsConstructor;
@@ -12,12 +13,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskUpdateRequest implements Serializable{
+public class TaskSaveRequest implements Serializable {
 
-	private static final long serialVersionUID = 3230043999787098995L;
+	private static final long serialVersionUID = 4708340309441896979L;
 
 	private String description;
-	
+
+	private Date dueDate;
+
 	private Priority priority;
-	
 }

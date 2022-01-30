@@ -1,6 +1,6 @@
 package br.com.viceri.todo.security;
 
-import static br.com.viceri.todo.model.util.Constants.SUFIX;
+import static br.com.viceri.todo.util.Constants.SUFIX;
 
 import java.io.IOException;
 import java.util.ArrayList;

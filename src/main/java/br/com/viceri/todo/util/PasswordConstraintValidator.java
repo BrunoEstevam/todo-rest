@@ -1,4 +1,4 @@
-package br.com.viceri.todo.model.util;
+package br.com.viceri.todo.util;
 
 import java.util.Arrays;
 
