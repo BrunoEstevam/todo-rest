@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import br.com.viceri.todo.exception.GenericError;
 import br.com.viceri.todo.model.User;
-import br.com.viceri.todo.repository.CommomBaseRepository;
 import br.com.viceri.todo.repository.UserRepositoryInterface;
 
 @Repository

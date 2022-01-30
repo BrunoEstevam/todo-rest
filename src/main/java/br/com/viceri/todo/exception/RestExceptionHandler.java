@@ -34,7 +34,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return buildResponseEntity(ex, HttpStatus.FORBIDDEN);
 	}
 	
-	@ExceptionHandler({ EntityExistsException.class })
+	@ExceptionHandler({ EntityExistsException.class, PasswordConstraintException.class })
 	protected ResponseEntity<Object> handleException(EntityExistsException ex, WebRequest request) {
 		return buildResponseEntity(ex, HttpStatus.BAD_REQUEST);
 	}

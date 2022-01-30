@@ -1,4 +1,4 @@
-package br.com.viceri.todo.repository;
+package br.com.viceri.todo.repository.impl;
 
 import javax.sql.DataSource;
 

@@ -14,7 +14,6 @@ import br.com.viceri.todo.model.Priority;
 import br.com.viceri.todo.model.Status;
 import br.com.viceri.todo.model.Task;
 import br.com.viceri.todo.model.User;
-import br.com.viceri.todo.repository.CommomBaseRepository;
 import br.com.viceri.todo.repository.TaskRepositoryInterface;
 
 @Repository
@@ -35,12 +34,11 @@ public class TaskRepositoryImplmentation extends CommomBaseRepository {
 	public Task update(Task entity) {
 		try {
 			return repositoryInterface.save(entity);
-
 		} catch (Exception e) {
 			throw new GenericError("Erro ao gravar tarefa", e);
 		}
 	}
-	
+
 	public void delete(Long id) {
 		try {
 			repositoryInterface.deleteById(id);

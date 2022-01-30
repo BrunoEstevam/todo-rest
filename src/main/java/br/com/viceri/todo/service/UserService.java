@@ -26,6 +26,7 @@ import br.com.viceri.todo.exception.RefreshTokenException;
 import br.com.viceri.todo.model.User;
 import br.com.viceri.todo.repository.impl.UserRepositoryImplmentation;
 import br.com.viceri.todo.security.JwtUtil;
+import br.com.viceri.todo.util.EmailValidation;
 import br.com.viceri.todo.util.PasswordConstraintValidator;
 
 @Service
@@ -36,7 +37,7 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-
+	
 	@Autowired
 	private PasswordConstraintValidator passwordConstraintValidator;
 
@@ -84,7 +85,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	public User update(User entity, String email) {
-		User user = findById(entity.getId());
+		User user = repository.findById(entity.getId());
 		User userToken = findByEmail(email);
 		
 		if (null == user) {
@@ -111,6 +112,8 @@ public class UserService implements UserDetailsService {
 				throw new EntityExistsException();
 			}
 
+			EmailValidation.isValid(entity.getEmail());
+			
 			return user;
 
 		} catch (IncorrectResultSizeDataAccessException | EntityExistsException e) {

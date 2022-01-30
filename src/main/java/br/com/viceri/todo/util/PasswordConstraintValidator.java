@@ -4,8 +4,6 @@ import java.util.Arrays;
 
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
-import org.passay.EnglishSequenceData;
-import org.passay.IllegalSequenceRule;
 import org.passay.LengthRule;
 import org.passay.PasswordData;
 import org.passay.PasswordValidator;
@@ -33,13 +31,10 @@ public class PasswordConstraintValidator {
 
 	public boolean isValid(String password) {
 		PasswordValidator validator = new PasswordValidator(
-				Arrays.asList(new LengthRule(8, 30), new CharacterRule(EnglishCharacterData.UpperCase, upper),
+				Arrays.asList(new LengthRule(4, 30), new CharacterRule(EnglishCharacterData.UpperCase, upper),
 						new CharacterRule(EnglishCharacterData.LowerCase, lower),
 						new CharacterRule(EnglishCharacterData.Digit, digit),
-						new CharacterRule(EnglishCharacterData.Special, special),
-						new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 5, false),
-						new IllegalSequenceRule(EnglishSequenceData.Numerical, 5, false),
-						new IllegalSequenceRule(EnglishSequenceData.USQwerty, 5, false), new WhitespaceRule()));
+						new CharacterRule(EnglishCharacterData.Special, special), new WhitespaceRule()));
 
 		RuleResult result = validator.validate(new PasswordData(new String(password)));
 

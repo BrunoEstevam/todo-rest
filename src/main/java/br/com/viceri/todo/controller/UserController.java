@@ -37,6 +37,7 @@ public class UserController {
 	@ApiResponses(value = { 
 			@ApiResponse(description = "Cria um novo usuário", responseCode = "201"),
 			@ApiResponse(description = "Caso já exista um usuário com o mesmo e-mail", responseCode = "400"),
+			@ApiResponse(description = "Caso o e-mail não seja válido", responseCode = "400"),
 			@ApiResponse(description = "Caso a senha não cumpra a poliítica de segurança", responseCode = "400")})
 	@ResponseStatus(value = HttpStatus.CREATED)
 	@PostMapping
@@ -49,6 +50,7 @@ public class UserController {
 			@ApiResponse(description = "Atualiza o novo usuário", responseCode = "200"),
 			@ApiResponse(description = "Caso o usuário do token não seja o mesmo que o da request", responseCode = "403"),
 			@ApiResponse(description = "Caso a consulta por id não retorne nenhum usuário", responseCode = "204"),
+			@ApiResponse(description = "Caso o e-mail não seja válido", responseCode = "400"),
 			@ApiResponse(description = "Caso já exista um usuário com o mesmo e-mail", responseCode = "400"),
 			@ApiResponse(description = "Caso a senha não cumpra a poliítica de segurança", responseCode = "400")})
 	@ResponseStatus(value = HttpStatus.OK)
