@@ -7,6 +7,7 @@
 - Docker(Opcional)
 - Flyway para migrations
 - Conceito de DTO's
+- Swagger
 - E mais...
 
 ## Para subir o projeto
@@ -37,3 +38,4 @@
   <br /><br/>
 - Dentro da pasta de resource terá uma collection do postman com todas as chamadas REST
 	
+- Para acessar o swagger: http://localhost:PORTA/swagger-ui/index.html

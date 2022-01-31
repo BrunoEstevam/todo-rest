@@ -26,7 +26,5 @@ public class TaskSaveRequest implements Serializable {
 
 	private Date dueDate;
 
-	@Size(max = 10)
-	@NotEmpty(message = "Informar a prioridade")
 	private Priority priority;
 }
