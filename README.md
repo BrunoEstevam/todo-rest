@@ -13,7 +13,7 @@
 ## Para subir o projeto
 
 
-** Banco de dados **
+**Banco de dados**
 - Primeira coisa que precisamos é de um banco de dados SQL Server
 - Você pode utilizar algum que estejá instalado na sua maquina ou criar o container pelo docker
 	- Para criar o container pelo docker vá ate a pasta raiz do projeto e digite ** docker compose up d** 
@@ -21,14 +21,14 @@
 	- Caso opite por criar um banco por fora do docker, será necessario alterar as propriedades do banco de dados no application.yml
 <br/><br/>
 
-** Lombok ** 
+**Lombok** 
 - Vamos instalar o lombok caso você não tenha, ele serve para evitar codigos boiler plate
 - Acesse o link https://projectlombok.org/download, e faça o download 
 - Abra ele com o java
 - Caso ele não encontre sua IDE automaticamente, selecione o ** Specify Location ** e abra na onde está o executável da sua IDE
 - Clique em install
 	
-** Subindo ** 
+**Subindo** 
 - Logo em seguida você podera utilizar a IDE da sua preferência para subir a aplicação
    - Exemplo STS: Clicando com o botão direito em cima do nome do projeto e Run As, **Spring Boot App**
 <br/><br/>
