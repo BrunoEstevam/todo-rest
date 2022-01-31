@@ -19,6 +19,7 @@
 	- Para criar o container pelo docker vá ate a pasta raiz do projeto pelo cmd e digite **docker compose up -d** 
 	- Após isso o container deve aparecer no seu docker
 	- Caso opite por criar um banco por fora do docker, será necessario alterar as propriedades do banco de dados no application.yml
+- Depois crie um banco de dados chamado db_todo
 <br/><br/>
 
 **Lombok** 
