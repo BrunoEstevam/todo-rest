@@ -35,7 +35,7 @@
 - Você não precisa se procupar com cargas no banco pois já está utilizando migration para as cargar iniciais
 - Porém todos os scripts estão disponibilizados dentro da pasta src/main/java/resources/db/migration
 - Projeto de pé, na porta 8080
-  <br /><br/>
+<br /><br/>
 - Dentro da pasta de resource terá uma collection do postman com todas as chamadas REST
 	
 - Para acessar o swagger: http://localhost:PORTA/swagger-ui/index.html
