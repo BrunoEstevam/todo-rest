@@ -26,7 +26,7 @@
 - Acesse o link https://projectlombok.org/download, e faça o download 
 - Abra ele com o java
 - Caso ele não encontre sua IDE automaticamente, selecione o **Specify Location** e abra na onde está o executável da sua IDE
-- Clique em install
+- Clique em install, reabra sua IDE e vá no menu project e depois clean
 	
 **Subindo** 
 - Logo em seguida você poderá utilizar a IDE da sua preferência para subir a aplicação
