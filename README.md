@@ -25,7 +25,7 @@
 - Vamos instalar o lombok caso você não tenha, ele serve para evitar codigos boiler plate
 - Acesse o link https://projectlombok.org/download, e faça o download 
 - Abra ele com o java
-- Caso ele não encontre sua IDE automaticamente, selecione o ** Specify Location ** e abra na onde está o executável da sua IDE
+- Caso ele não encontre sua IDE automaticamente, selecione o **Specify Location** e abra na onde está o executável da sua IDE
 - Clique em install
 	
 **Subindo** 
