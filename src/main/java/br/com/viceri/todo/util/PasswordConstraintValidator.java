@@ -28,7 +28,8 @@ public class PasswordConstraintValidator {
 
 	@Value("${password.policy.special}")
 	private Integer special;
-
+	
+	// Cria politica de senha e valida a senha do usuario
 	public boolean isValid(String password) {
 		PasswordValidator validator = new PasswordValidator(
 				Arrays.asList(new LengthRule(4, 30), new CharacterRule(EnglishCharacterData.UpperCase, upper),

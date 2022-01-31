@@ -1,9 +1,7 @@
 package br.com.viceri.todo.exception;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import java.util.UUID;
 
 import javax.persistence.EntityExistsException;
@@ -35,12 +33,23 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleException(EmptyResultDataAccessException ex, WebRequest request) {
 		return buildResponseEntity(ex, HttpStatus.NO_CONTENT);
 	}
-	
-	@ExceptionHandler({ RefreshTokenException.class })
-	protected ResponseEntity<Object> handleException(RefreshTokenException ex, WebRequest request) {
-		return buildResponseEntity(ex, HttpStatus.FORBIDDEN);
+
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		HashMap<String, String> details = new HashMap<>();
+
+		for (final FieldError error : ex.getBindingResult().getFieldErrors()) {
+			details.put(error.getField(), error.getDefaultMessage());
+		}
+		for (final ObjectError error : ex.getBindingResult().getGlobalErrors()) {
+			details.put(error.getObjectName(), error.getDefaultMessage());
+		}
+
+		return new ResponseEntity<>(new ApiError(status.value(), UUID.randomUUID().toString(), details,
+				ex.getClass().getName(), new Date()), status);
 	}
-	
+
 	@ExceptionHandler({ EntityExistsException.class })
 	protected ResponseEntity<Object> handleException(EntityExistsException ex, WebRequest request) {
 		return buildResponseEntity(ex, HttpStatus.BAD_REQUEST);
@@ -50,28 +59,30 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleException(InvalidDataException ex, WebRequest request) {
 		return buildResponseEntity(ex, HttpStatus.BAD_REQUEST);
 	}
-		
+
 	@ExceptionHandler({ AccessDeniedException.class })
 	protected ResponseEntity<Object> handleException(AccessDeniedException ex, WebRequest request) {
 		return buildResponseEntity(ex, HttpStatus.FORBIDDEN);
 	}
-	
+
 	@ExceptionHandler({ GenericError.class })
 	protected ResponseEntity<Object> handleException(GenericError ex, WebRequest request) {
 		return buildResponseEntity(ex, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	
+
 	@ExceptionHandler({ PasswordConstraintException.class })
 	protected ResponseEntity<Object> handleException(PasswordConstraintException ex, WebRequest request) {
 		return buildResponseEntity(ex, HttpStatus.BAD_REQUEST);
 	}
-	
+
 	private ResponseEntity<Object> buildResponseEntity(Throwable t, HttpStatus status) {
 		String uid = UUID.randomUUID().toString();
 		log.error(uid, t);
 
-		return new ResponseEntity<>(
-				new ApiError(status.value(), uid, t.getMessage(), t.getClass().getName(), new Date()), status);
-	}
+		HashMap<String, String> messages = new HashMap<>();
+		messages.put("Message", t.getMessage());
 
+		return new ResponseEntity<>(new ApiError(status.value(), uid, messages, t.getClass().getName(), new Date()),
+				status);
+	}
 }

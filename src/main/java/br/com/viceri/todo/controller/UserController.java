@@ -42,7 +42,7 @@ public class UserController {
 			@ApiResponse(description = "Caso a senha não cumpra a poliítica de segurança", responseCode = "400")})
 	@ResponseStatus(value = HttpStatus.CREATED)
 	@PostMapping
-	public UserResponse save(@RequestBody UserRequest userResquet) {
+	public UserResponse save(@RequestBody @Validated UserRequest userResquet) {
 		// Save and convert to DTO
 		return modelMapper.map(userService.save(modelMapper.map(userResquet, User.class)), UserResponse.class);
 	}
@@ -56,7 +56,7 @@ public class UserController {
 			@ApiResponse(description = "Caso a senha não cumpra a poliítica de segurança", responseCode = "400")})
 	@ResponseStatus(value = HttpStatus.OK)
 	@PutMapping(value = "/{id}")
-	public void update(@PathVariable(required = true) Long id, @RequestBody UserUpdateRequest userResquet, Principal principal) {
+	public void update(@PathVariable(required = true) Long id, @RequestBody @Validated UserUpdateRequest userResquet, Principal principal) {
 		// Seta o id no objeto para que consiga validar e atualizar
 		userResquet.setId(id);
 		

@@ -8,6 +8,8 @@ import br.com.viceri.todo.exception.InvalidDataException;
 public class EmailValidation {
 	private static final String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
+	// Valida o email caso seja valido retorna true
+	// Caso não lança exceção de email inválido
 	public static boolean isValid(String email) {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(email);

@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import br.com.viceri.todo.exception.GenericError;
-import br.com.viceri.todo.exception.RefreshTokenException;
+import br.com.viceri.todo.exception.InvalidDataException;
 import br.com.viceri.todo.model.User;
 import br.com.viceri.todo.repository.impl.UserRepositoryImplmentation;
 import br.com.viceri.todo.security.JwtUtil;
@@ -40,7 +40,8 @@ public class UserService implements UserDetailsService {
 	
 	@Autowired
 	private PasswordConstraintValidator passwordConstraintValidator;
-
+	
+	// Carrega o usuario para se autenticar
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		User user = findByEmail(email);
@@ -64,10 +65,10 @@ public class UserService implements UserDetailsService {
 				return JwtUtil.generateAcessToken(request, user);
 
 			} catch (Exception e) {
-				throw new RefreshTokenException("Não foi possivel gerar o acess token", e);
+				throw new InvalidDataException("Não foi possivel gerar o access token");
 			}
 		} else {
-			throw new RefreshTokenException("Refresh token não encontrado");
+			throw new InvalidDataException("Refresh token não encontrado");
 		}
 	}
 
@@ -96,22 +97,29 @@ public class UserService implements UserDetailsService {
 
 		} else if (StringUtils.isNotEmpty(entity.getPassword())) {
 			passwordConstraintValidator.isValid(entity.getPassword());
+			entity.setPassword(bCryptPasswordEncoder.encode(entity.getPassword()));
 
 		} else {
 			// Seta a senha para nao ter que enviar na request
 			entity.setPassword(user.getPassword());
 		}
 
+		entity.setEmail(user.getEmail());
+		
 		return repository.save(entity);
 	}
 
 	private User emailIsValid(User entity) {
 		try {
+			// Verifica se já existe um usuario cadastrado com o mesmo email
+			// Caso existir ele continua
+			// Se lança a excessão de usuári já existente
 			User user = findByEmail(entity.getEmail());
 			if (null != user && user.getId() != entity.getId()) {
 				throw new EntityExistsException();
 			}
 
+			// Valida o  email
 			EmailValidation.isValid(entity.getEmail());
 			
 			return user;
@@ -120,6 +128,8 @@ public class UserService implements UserDetailsService {
 		}
 	}
 
+	
+	// Consultas
 	public User findByEmail(String email) {
 		return repository.findByEmail(email);
 	}

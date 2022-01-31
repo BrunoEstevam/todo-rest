@@ -1,6 +1,7 @@
 package br.com.viceri.todo.exception;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,8 +15,8 @@ public class ApiError {
 
 	private String uid;
 
-	private String message;
-
+	private HashMap<String, String> messages;
+	
 	private String exceptionClass;
 
 	private Date date;

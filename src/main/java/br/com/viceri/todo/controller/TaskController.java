@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +40,7 @@ public class TaskController {
 			@ApiResponse(description = "Caso algum dado sejá inválido", responseCode = "400") })
 	@ResponseStatus(value = HttpStatus.CREATED)
 	@PostMapping
-	public Task save(@RequestBody TaskSaveRequest taskRequest, Principal principal) {
+	public Task save(@RequestBody @Validated TaskSaveRequest taskRequest, Principal principal) {
 		return taskService.save(modelMapper.map(taskRequest, Task.class), principal.getName());
 	}
 
@@ -72,7 +73,8 @@ public class TaskController {
 	@ApiResponses(value = { @ApiResponse(description = "Consulta as tarefas do usuário", responseCode = "200"),
 			@ApiResponse(description = "Caso não encontre nenhuma tarefa", responseCode = "204") })
 	@GetMapping("/findAll")
-	public ResponseEntity<List<Task>> findByPriority(@RequestBody TaskFilterRequest taskFilterRequest, Principal principal) {
+	public ResponseEntity<List<Task>> findByPriority(@RequestBody TaskFilterRequest taskFilterRequest,
+			Principal principal) {
 		List<Task> entities = taskService.findByPriority(taskFilterRequest, principal.getName());
 
 		if (null == entities || entities.isEmpty()) {
